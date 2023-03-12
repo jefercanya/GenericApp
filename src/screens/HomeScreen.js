@@ -24,7 +24,7 @@ export default function HomeScreen(props) {
       <Text>Estamos en HomeScreen</Text>
       <Text>Estamos en HomeScreen</Text>
       <Text>Estamos en HomeScreen</Text>
-      <Text>Estamos en HomeScreen</Text>
+      <Text>Login</Text>
       <Button onPress={goToSettings} title="Ir a Ajustes" />
       <View></View>
       <Button onPress={goToWebView} title="Ir a Chat" />
