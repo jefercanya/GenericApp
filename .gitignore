@@ -1,3 +1,5 @@
+src/util/constants.js
+
 node_modules/
 .expo/
 dist/

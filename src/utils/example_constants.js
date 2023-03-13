@@ -1,5 +1,5 @@
 export const API_HOST = "https://pokeapi.co/api/v2";
-export const API_HOST_USER = "https://buscadormicontador.azurewebsites.net/api/User/Login?email=jefercanya@hotmail.com&telephone=3206279569";
+export const API_HOST_USER = "";
 
 export const POKEMON_TYPE_COLORS = {
   normal: "#A8A878",
