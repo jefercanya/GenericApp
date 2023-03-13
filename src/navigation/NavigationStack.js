@@ -29,7 +29,7 @@ export default function NavigationStack() {
           ? (
             <>
               <Stack.Screen name="Login" component={LoginForm} />
-              <Stack.Screen name="NewUser" component={NewUserScreen} />
+              <Stack.Screen name="NewUser" component={NewUserScreen} options={{headerShown: true, title: 'Nuevo Usuario',}}/>
             </>
           )
           : (

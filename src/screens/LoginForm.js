@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   Keyboard,
+  ToastAndroid
 } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -66,6 +67,8 @@ export default function LoginForm(props) {
 
       if (response.response === "0") {
         setError("El usuario o la contraseña no son correctos");
+        ToastAndroid.show('El usuario o la contraseña no son correctos', ToastAndroid.SHORT);
+
       } else {
         login(response);
         console.log("Login correcto");
