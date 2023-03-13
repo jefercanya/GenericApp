@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { user, userDetails } from "../utils/userDB";
 import useAuth from "../hooks/useAuth";
-import { getUserByCredentials } from "../api/user";
+import { getLoginUser } from "../api/user";
 
 
 export default function LoginForm(props) {
@@ -33,8 +33,9 @@ export default function LoginForm(props) {
     try {
       console.log("Nombre usuario: "+ username + " --- Password: " + password);
       console.log("Antes de la API");
-      const response = await getUserByCredentials(username, password);
+      const response = await getLoginUser(username, password);
       console.log(response);
+      return response;
     } catch (error) {
       console.error(error);
     }
@@ -44,20 +45,32 @@ export default function LoginForm(props) {
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
     validateOnChange: false,
-    onSubmit: (formValue) => {
+    onSubmit: async (formValue) => {
       setError("");
       const { username, password } = formValue;
       console.log("Antes de la funcion GetUser");
-      getUser(username, password);
+      const response = await getUser(username, password);
+
+      console.log(response.legalName);
+      console.log(response.whatsappNumber);
+      console.log(response);
 
 
-      if (username !== user.username || password !== user.password) {
+      /* if (username !== user.username || password !== user.password) {
         setError("El usuario o la contraseña no son correctos");
       } else {
         login(userDetails);
         console.log("Login correcto");
         console.log(userDetails);
-      }
+      } */
+
+      if (response.response === "0") {
+        setError("El usuario o la contraseña no son correctos");
+      } else {
+        login(response);
+        console.log("Login correcto");
+        //console.log(userDetails);
+      } 
     },
   });
 
