@@ -1,7 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { View, Text, Button } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import ExitButton from "../components/ExitButton";
 
 export default function HomeScreen(props) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <ExitButton/>,
+      // headerLeft: () => (
+      //   <Icon
+      //     name="arrow-left"
+      //     color="#fff"
+      //     size={20}
+      //     style={{ marginLeft: 20 }}
+      //     onPress={navigation.goBack}
+      //   />
+      // ),
+    });
+  }, []);
+
   console.log(props);
   const { navigation } = props;
 
