@@ -14,44 +14,51 @@ import { user, userDetails } from "../utils/userDB";
 import useAuth from "../hooks/useAuth";
 import { getLoginUser } from "../api/user";
 import { addUserAsyncStorage, getUserAsyncStorage } from "../api/userAsyncStorage";
+import { LoadingScreen } from "../components/LoadingScreen";
 
 
 export default function LoginForm(props) {
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     (async () => {
-      
+
       const user = await getUserAsyncStorage();
-      
+
       //user.push("Audi");
 
-      if (!user)
-      {
+      if (user) {
         console.log("No hay usuario")
+
+        const parseObject = JSON.parse(user);
+        console.log(parseObject);
+
+        if (parseObject.response === null) {
+          console.log("No hay respuesta");
+        }
+
+        console.log(parseObject.response);
+        console.log(parseObject.emailPrincipal);
+        console.log(parseObject.whatsappNumber);
+
+        if (parseObject.response === "1") {
+          console.log("Hay q loguearse wacho");
+          await getUser(parseObject.emailPrincipal, parseObject.whatsappNumber);
+        }
+
+        
       }
-      
-      console.log(user);
+
+      //console.log(user);
+
+      setIsLoaded(true);
+
       //console.log("=>" + user[0]);
       //setUsers(users);
       //console.log("este usuario " + JSON.stringify(user.toString()))
 
-      const parseObject = JSON.parse(user);
-      console.log(parseObject);
-      
-      if (parseObject.response===null)
-      {
-        console.log("No hay respuesta");  
-      }
 
-      console.log(parseObject.response);
-      console.log(parseObject.emailPrincipal);
-      console.log(parseObject.whatsappNumber);
-
-      if(parseObject.response === "1")
-      {
-        console.log("Hay q loguearse wacho");
-        await getUser(parseObject.emailPrincipal, parseObject.whatsappNumber);
-      }
       //const x = user[0];
       //console.log(x);
       //console.log(user[0]);
@@ -60,11 +67,11 @@ export default function LoginForm(props) {
       // const json = user;
       // const obj = JSON.parse(json);
 
-//console.log(obj.count);
-// Expected output: 42
+      //console.log(obj.count);
+      // Expected output: 42
 
-//console.log(obj.result);
-// Expected output: true
+      //console.log(obj.result);
+      // Expected output: true
     })();
   }, []);
 
@@ -97,7 +104,7 @@ export default function LoginForm(props) {
       console.log("Antes de la API");
       const response = await getLoginUser(username, password);
       console.log(response);
-      
+
       if (response.response === "0") {
         setError("El usuario o la contraseña no son correctos");
         ToastAndroid.show('El usuario o la contraseña no son correctos', ToastAndroid.SHORT);
@@ -151,33 +158,46 @@ export default function LoginForm(props) {
   });
 
   return (
-    <View>
-      <Text style={styles.title}>Iniciar sesión</Text>
-      <TextInput
-        placeholder="Nombre de usuario"
-        style={styles.input}
-        autoCapitalize="none"
-        value={formik.values.username}
-        onChangeText={(text) => formik.setFieldValue("username", text)}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        style={styles.input}
-        autoCapitalize="none"
-        secureTextEntry={true}
-        value={formik.values.password}
-        onChangeText={(text) => formik.setFieldValue("password", text)}
-      />
-      <Button title="Entrar" onPress={formik.handleSubmit} />
+    (isLoaded)
+      ? (
+        <>
+          <View>
 
-      <Text style={styles.error}>{formik.errors.username}</Text>
-      <Text style={styles.error}>{formik.errors.password}</Text>
+            <Text style={styles.title}>Iniciar sesión</Text>
+            <TextInput
+              placeholder="Nombre de usuario"
+              style={styles.input}
+              autoCapitalize="none"
+              value={formik.values.username}
+              onChangeText={(text) => formik.setFieldValue("username", text)}
+            />
+            <TextInput
+              placeholder="Contraseña"
+              style={styles.input}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              value={formik.values.password}
+              onChangeText={(text) => formik.setFieldValue("password", text)}
+            />
+            <Button title="Entrar" onPress={formik.handleSubmit} />
 
-      <Text style={styles.error}>{error}</Text>
-      <Button onPress={() => goToPage("NewUser")} title="Crear Usuario" />
+            <Text style={styles.error}>{formik.errors.username}</Text>
+            <Text style={styles.error}>{formik.errors.password}</Text>
 
-      <Button onPress={getUserStorage} title="Get User" />
-    </View>
+            <Text style={styles.error}>{error}</Text>
+            <Button onPress={() => goToPage("NewUser")} title="Crear Usuario" />
+
+            <Button onPress={getUserStorage} title="Get User" />
+
+
+          </View>
+        </>
+      )
+      : (
+        <>
+          <LoadingScreen />
+        </>
+      )
   );
 }
 
